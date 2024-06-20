@@ -15,7 +15,7 @@ COPY . .
 
 # Créer le dossier uploads
 RUN mkdir -p uploads
-
+RUN npm install typescript -g  # Ensure typescript is installed globally
 # Compiler le code TypeScript
 RUN npx tsc
 

@@ -13,6 +13,7 @@ RUN npm install
 # Copier tout le reste des fichiers de l'application
 COPY . .
 
+RUN npm install typescript -g  # Ensure typescript is installed globally
 # Compiler le code TypeScript
 RUN npx tsc
 
