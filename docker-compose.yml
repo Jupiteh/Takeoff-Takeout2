@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   restaurant-api:
     build: ./services/restaurant_service
@@ -10,41 +11,27 @@ services:
       - ./uploads:/app/uploads
     depends_on:
       - restaurant-mongo
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.restaurant-service.rule=PathPrefix(`/api/restaurants`)"
+      - "traefik.http.services.restaurant-service.loadbalancer.server.port=3001"
 
   restaurant-mongo:
     image: mongo
+    container_name: restaurant-mongo
     ports:
       - '27017:27017'
     volumes:
-      - ./mongo-data/restaurant:/data/db
+      - restaurant-mongo-data:/data/db
+    networks:
+      - app-network
     healthcheck:
       test: "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # user-api:
-  #   build: ./services/user_service
-  #   ports:
-  #     - '3002:3002'
-  #   env_file:
-  #     - ./services/user_service/.env
-  #   volumes:
-  #     - ./uploads:/app/uploads
-  #   depends_on:
-  #     - user-mongo
-
-  # user-mongo:
-  #   image: mongo
-  #   ports:
-  #     - '27018:27017'
-  #   volumes:
-  #     - ./mongo-data/user:/data/db
-  #   healthcheck:
-  #     test: "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
 
   order-api:
     build: ./services/order_service
@@ -52,40 +39,103 @@ services:
       - '3003:3003'
     env_file:
       - ./services/order_service/.env
-    # volumes:
-    #   - ./uploads:/app/uploads
     depends_on:
       - order-mongo
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.order-service.rule=PathPrefix(`/api/orders`)"
+      - "traefik.http.services.order-service.loadbalancer.server.port=3003"
 
   order-mongo:
     image: mongo
+    container_name: order-mongo
     ports:
-      - '27019:27017'
+      - '27018:27017'
     volumes:
-      - ./mongo-data/order:/data/db
+      - order-mongo-data:/data/db
+    networks:
+      - app-network
     healthcheck:
       test: "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"
       interval: 10s
       timeout: 5s
       retries: 5
 
+  auth-service:
+    build:
+      context: ./services/auth-service
+    container_name: auth-service
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://auth-mongo:27017/AuthData
+      - JWT_SECRET=baudelaire
+      - LOGGING_SERVICE_URL=http://logging-service:3004/logs
+    networks:
+      - app-network
+    depends_on:
+      - auth-mongo
+      - logging-service
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-service.rule=PathPrefix(`/auth`)"
+      - "traefik.http.services.auth-service.loadbalancer.server.port=3000"
+    volumes:
+      - ./services/auth-service:/app
+
+  auth-mongo:
+    image: mongo:latest
+    container_name: auth-mongo
+    ports:
+      - "27019:27017"
+    networks:
+      - app-network
+    volumes:
+      - auth-mongo-data:/data/db
+
+  logging-service:
+    build: ./services/logging-service
+    container_name: logging-service
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGO_URI=mongodb://logging-mongo:27017/logging
+    networks:
+      - app-network
+    depends_on:
+      - logging-mongo
+
+  logging-mongo:
+    image: mongo
+    container_name: logging-mongo
+    ports:
+      - "27021:27017"
+    volumes:
+      - logging-mongo-data:/data/db
+    networks:
+      - app-network
+
   cart-api:
     build: ./services/cart_service
     ports:
-      - '3004:3004'
+      - '3005:3005'
     env_file:
       - ./services/cart_service/.env
-    # volumes:
-    #   - ./uploads:/app/uploads
     depends_on:
       - cart-mongo
+    networks:
+      - app-network
 
   cart-mongo:
     image: mongo
     ports:
-      - '27020:27017'
+      - '27022:27017'
     volumes:
-      - ./mongo-data/cart:/data/db
+      - cart-mongo-data:/data/db
+    networks:
+      - app-network
     healthcheck:
       test: "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"
       interval: 10s
@@ -95,22 +145,53 @@ services:
   delivery-api:
     build: ./services/delivery_service
     ports:
-      - '3005:3005'
+      - '3006:3006'
     env_file:
       - ./services/delivery_service/.env
-    # volumes:
-    #   - ./uploads:/app/uploads
     depends_on:
       - delivery-mongo
+    networks:
+      - app-network
 
   delivery-mongo:
     image: mongo
     ports:
-      - '27021:27017'
+      - '27023:27017'
     volumes:
-      - ./mongo-data/delivery:/data/db
+      - delivery-mongo-data:/data/db
+    networks:
+      - app-network
     healthcheck:
       test: "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"
       interval: 10s
       timeout: 5s
       retries: 5
+
+  traefik:
+    image: traefik:v2.5
+    container_name: traefik
+    ports:
+      - "8080:80"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+      - "--entryPoints.web.address=:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./dynamic.yaml:/etc/traefik/dynamic/dynamic.yaml"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  restaurant-mongo-data:
+  order-mongo-data:
+  auth-mongo-data:
+  logging-mongo-data:
+  cart-mongo-data:
+  delivery-mongo-data:

@@ -1,0 +1,46 @@
+http:
+  routers:
+    auth-service-router:
+      rule: "PathPrefix(`/auth`)"
+      service: auth-service
+      entryPoints:
+        - web
+
+    restaurant-service-router:
+      rule: "PathPrefix(`/api/restaurants`)"
+      service: restaurant-service
+      entryPoints:
+        - web
+
+    order-service-router:
+      rule: "PathPrefix(`/api/orders`)"
+      service: order-service
+      entryPoints:
+        - web
+
+    logging-service-router:
+      rule: "PathPrefix(`/logs`)"
+      service: logging-service
+      entryPoints:
+        - web
+
+  services:
+    auth-service:
+      loadBalancer:
+        servers:
+          - url: "http://auth-service:3000"
+
+    restaurant-service:
+      loadBalancer:
+        servers:
+          - url: "http://restaurant-api:3001"
+
+    order-service:
+      loadBalancer:
+        servers:
+          - url: "http://order-api:3003"
+
+    logging-service:
+      loadBalancer:
+        servers:
+          - url: "http://logging-service:3004"
