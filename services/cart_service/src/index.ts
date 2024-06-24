@@ -10,13 +10,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3004;
 
-app.use(cors());
+// Configuration CORS
+const corsOptions = {
+  origin: 'http://localhost:3002', // Remplacez par l'origine de votre application front-end
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Configurer Express pour servir les fichiers statiques
 app.use(express.json());
-// app.use('/uploads/restaurant', express.static(path.join(__dirname, '../uploads/restaurant')));
-// app.use('/uploads/article', express.static(path.join(__dirname, '../uploads/article')));
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGO_URI as string).then(() => {
@@ -27,6 +31,11 @@ mongoose.connect(process.env.MONGO_URI as string).then(() => {
 
 // Définir les routes de l'API
 app.use('/api', cartRoutes);
+
+// Gestion des erreurs 404
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Not Found' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
