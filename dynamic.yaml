@@ -18,6 +18,18 @@ http:
       entryPoints:
         - web
 
+    cart-service-router:
+      rule: "PathPrefix(`/api/carts`)"
+      service: cart-service
+      entryPoints:
+        - web
+
+    delivery-service-router:
+      rule: "PathPrefix(`/api/delivery`)"
+      service: delivery-service
+      entryPoints:
+        - web
+
     logging-service-router:
       rule: "PathPrefix(`/logs`)"
       service: logging-service
@@ -28,7 +40,7 @@ http:
     auth-service:
       loadBalancer:
         servers:
-          - url: "http://auth-service:3000"
+          - url: "http://auth-service:3002"
 
     restaurant-service:
       loadBalancer:
@@ -39,8 +51,18 @@ http:
       loadBalancer:
         servers:
           - url: "http://order-api:3003"
+      
+    cart-service:
+      loadBalancer:
+        servers:
+          - url: "http://order-api:3004"
+
+    delivery-service:
+      loadBalancer:
+        servers:
+          - url: "http://order-api:3005"
 
     logging-service:
       loadBalancer:
         servers:
-          - url: "http://logging-service:3004"
+          - url: "http://logging-service:3006"

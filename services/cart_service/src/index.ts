@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3004;
 
 // Configuration CORS
 const corsOptions = {
-  origin: 'http://localhost:3002', // Remplacez par l'origine de votre application front-end
+  origin: 'http://localhost:3000', // Remplacez par l'origine de votre application front-end
   credentials: true,
 };
 app.use(cors(corsOptions));

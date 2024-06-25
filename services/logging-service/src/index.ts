@@ -38,7 +38,7 @@ app.get('/logs', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3006;
 app.listen(PORT, () => {
     console.log(`Logging service running on port ${PORT}`);
 });

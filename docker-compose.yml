@@ -52,7 +52,7 @@ services:
     image: mongo
     container_name: order-mongo
     ports:
-      - '27018:27017'
+      - '27019:27017'
     volumes:
       - order-mongo-data:/data/db
     networks:
@@ -68,11 +68,11 @@ services:
       context: ./services/auth-service
     container_name: auth-service
     ports:
-      - "3000:3000"
+      - "3002:3002"
     environment:
       - MONGO_URI=mongodb://auth-mongo:27017/AuthData
       - JWT_SECRET=baudelaire
-      - LOGGING_SERVICE_URL=http://logging-service:3004/logs
+      - LOGGING_SERVICE_URL=http://logging-service:3006/logs
     networks:
       - app-network
     depends_on:
@@ -89,7 +89,7 @@ services:
     image: mongo:latest
     container_name: auth-mongo
     ports:
-      - "27019:27017"
+      - "27018:27017"
     networks:
       - app-network
     volumes:
@@ -99,7 +99,7 @@ services:
     build: ./services/logging-service
     container_name: logging-service
     ports:
-      - "3004:3004"
+      - "3006:3006"
     environment:
       - MONGO_URI=mongodb://logging-mongo:27017/logging
     networks:
@@ -111,7 +111,7 @@ services:
     image: mongo
     container_name: logging-mongo
     ports:
-      - "27021:27017"
+      - "27022:27017"
     volumes:
       - logging-mongo-data:/data/db
     networks:
@@ -120,7 +120,7 @@ services:
   cart-api:
     build: ./services/cart_service
     ports:
-      - '3005:3005'
+      - '3004:3004'
     env_file:
       - ./services/cart_service/.env
     depends_on:
@@ -131,7 +131,7 @@ services:
   cart-mongo:
     image: mongo
     ports:
-      - '27022:27017'
+      - '27020:27017'
     volumes:
       - cart-mongo-data:/data/db
     networks:
@@ -145,7 +145,7 @@ services:
   delivery-api:
     build: ./services/delivery_service
     ports:
-      - '3006:3006'
+      - '3005:3005'
     env_file:
       - ./services/delivery_service/.env
     depends_on:
@@ -156,7 +156,7 @@ services:
   delivery-mongo:
     image: mongo
     ports:
-      - '27023:27017'
+      - '27021:27017'
     volumes:
       - delivery-mongo-data:/data/db
     networks:

@@ -5,8 +5,8 @@ const restaurantApi = axios.create({
   baseURL: config.RESTAURANT_API_URL,
 });
 
-const userApi = axios.create({
-  baseURL: config.USER_API_URL,
+const authApi = axios.create({
+  baseURL: config.AUTH_API_URL,
 });
 
 const cartApi = axios.create({
@@ -17,4 +17,4 @@ const orderApi = axios.create({
   baseURL: config.ORDER_API_URL,
 });
 
-export { restaurantApi, userApi, cartApi, orderApi };
+export { restaurantApi, authApi, cartApi, orderApi };
