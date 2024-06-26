@@ -15,7 +15,7 @@ const articleSchema: Schema = new Schema({
   },
   ID_Restaurant: {
     type: Number,
-    unique: true
+    required: true
   },
   article_Name: {
     type: String,

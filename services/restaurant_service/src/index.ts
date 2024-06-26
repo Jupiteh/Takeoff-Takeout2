@@ -36,5 +36,5 @@ app.use('/api', menuArticleRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log('What up negrito');
+  console.log('What up negro word');
 });
