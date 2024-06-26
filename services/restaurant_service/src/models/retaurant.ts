@@ -5,6 +5,7 @@ interface IRestaurant extends Document {
   ID_Restaurant: number;
   ID_Restaurateur: number;
   nom_Restaurant: string;
+  category: string;
   image: string;
   adresse: string;
   latitude: number;
@@ -21,6 +22,10 @@ const restaurantSchema: Schema = new Schema({
     required: true
   },
   nom_Restaurant: {
+    type: String,
+    required: true
+  },
+  category: {
     type: String,
     required: true
   },
