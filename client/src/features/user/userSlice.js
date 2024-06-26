@@ -15,6 +15,8 @@ const userSlice = createSlice({
     name: '',
     email: '',
     token: '',
+    role: '',
+    isLoggedIn: false,
     status: 'idle',
     error: null,
   },
@@ -23,11 +25,15 @@ const userSlice = createSlice({
       state.name = action.payload.name;
       state.email = action.payload.email;
       state.token = action.payload.token;
+      state.role = action.payload.role;
+      state.isLoggedIn = true;
     },
     clearUser: (state) => {
       state.name = '';
       state.email = '';
       state.token = '';
+      state.role = '';
+      state.isLoggedIn = false;
     },
   },
   extraReducers: (builder) => {
@@ -39,6 +45,8 @@ const userSlice = createSlice({
         state.status = 'succeeded';
         state.name = action.payload.name;
         state.email = action.payload.email;
+        state.role = action.payload.role;
+        state.isLoggedIn = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = 'failed';

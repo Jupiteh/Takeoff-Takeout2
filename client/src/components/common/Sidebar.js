@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,8 +21,8 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 40px; /* Ajustez la hauteur selon vos besoins */
-  margin-bottom: 20px; /* Ajoutez un espace en dessous du logo */
+  height: 40px;
+  margin-bottom: 20px;
 `;
 
 const NavItem = styled(Link)`
@@ -36,12 +37,18 @@ const NavItem = styled(Link)`
 `;
 
 const Sidebar = () => {
+  const user = useSelector((state) => state.user);
+
+  if (!user.isLoggedIn) {
+    return null; // Hide Sidebar if not logged in
+  }
+
   return (
     <SidebarContainer>
       <LogoContainer>
         <Logo src={logo} alt="Logo" />
       </LogoContainer>
-      <NavItem to="/home">
+      <NavItem to="/">
         <FontAwesomeIcon icon={faHome} />
       </NavItem>
       <NavItem to="/profile">
