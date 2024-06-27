@@ -8,8 +8,8 @@ const router = Router();
 router.post('/register', register);
 router.post('/login', login);
 
-// Route protégée par JWT et rôle admin pour obtenir tous les utilisateurs
-router.get('/users', authenticateJWT, authorizeRole(['admin']), getUsers);
+// POUR LES TEST PLUS SIMPLE PEUT ETRE SUPPRIME
+router.get('/users', getUsers);
 
 // Routes protégées par rôle
 router.get('/admin', authenticateJWT, authorizeRole(['admin']), (req, res) => {

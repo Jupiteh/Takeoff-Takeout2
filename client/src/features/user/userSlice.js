@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
@@ -25,7 +26,8 @@ const userSlice = createSlice({
       state.name = action.payload.name;
       state.email = action.payload.email;
       state.token = action.payload.token;
-      state.role = action.payload.role;
+      const decodedToken = jwtDecode(action.payload.token); // Décodez le token
+      state.role = decodedToken.role; // Extrayez le rôle
       state.isLoggedIn = true;
     },
     clearUser: (state) => {
@@ -45,7 +47,9 @@ const userSlice = createSlice({
         state.status = 'succeeded';
         state.name = action.payload.name;
         state.email = action.payload.email;
-        state.role = action.payload.role;
+        state.token = action.payload.token;
+        const decodedToken = jwtDecode(action.payload.token); // Décodez le token
+        state.role = decodedToken.role; // Extrayez le rôle
         state.isLoggedIn = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
