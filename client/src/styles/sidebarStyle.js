@@ -1,5 +1,3 @@
-// src/styles/sidebarStyle.js
-
 const sidebarStyle = theme => ({
     drawerPaper: {
       border: 'none',
@@ -9,6 +7,7 @@ const sidebarStyle = theme => ({
       left: 0,
       zIndex: 1,
       width: 260,
+      backgroundColor: '#2b3e50', // Assurez-vous que la couleur de fond est définie
       [theme.breakpoints.up('md')]: {
         width: 260,
         position: 'fixed',

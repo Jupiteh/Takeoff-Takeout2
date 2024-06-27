@@ -17,7 +17,8 @@ const ContentContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   transition: margin-left 0.3s ease;
-  margin-left: ${({ $isOpen }) => ($isOpen ? '260px' : '80px')};
+  margin-left: ${({ $isOpen }) => ($isOpen ? '260px' : '80px')}; /* Ajuster la marge gauche */
+  background-color: rgba(0, 0, 0, 0.5); /* Pour la transparence */
 
   @media (max-width: 768px) {
     margin-left: 0;
@@ -29,9 +30,6 @@ const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.5); // Fond semi-transparent pour assurer la lisibilité
-  color: #ecf0f1;
 `;
 
 const TopBar = styled.div`
