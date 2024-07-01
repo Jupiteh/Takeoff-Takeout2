@@ -43,14 +43,9 @@ const Header = () => {
     dispatch(clearUser());
   };
 
-  // Log the user state for debugging purposes
-  console.log('User state:', { isLoggedIn, name });
-
   return (
     <HeaderContainer>
-      <div>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Accueil</Link>
-      </div>
+      <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Accueil</Link>
       <UserInfo>
         {isLoggedIn ? (
           <>
