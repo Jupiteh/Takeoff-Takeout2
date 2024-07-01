@@ -43,6 +43,9 @@ services:
       - ./services/order_service/.env
     depends_on:
       - order-mongo
+    volumes:
+      - ./services/order_service:/app
+      - /app/node_modules
     networks:
       - app-network
     labels:
@@ -125,6 +128,9 @@ services:
       - '3004:3004'
     env_file:
       - ./services/cart_service/.env
+    volumes:
+      - ./services/cart_service:/app
+      - /app/node_modules
     depends_on:
       - cart-mongo
     networks:

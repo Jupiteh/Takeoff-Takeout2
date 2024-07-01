@@ -48,7 +48,7 @@ export const updateArticle = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const updates = req.body;
-    const article = await Article.findById(id);
+    const article = await Article.findOne({ ID_Article: id });
 
     if (!article) {
       return res.status(404).json({ error: 'Article not found' });
@@ -62,7 +62,7 @@ export const updateArticle = async (req: Request, res: Response) => {
       updates.image = req.file.path;
     }
 
-    const updatedArticle = await Article.findByIdAndUpdate(id, updates, { new: true });
+    const updatedArticle = await Article.findOneAndUpdate({ ID_Article: id }, updates, { new: true });
     res.status(200).json(updatedArticle);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -72,7 +72,7 @@ export const updateArticle = async (req: Request, res: Response) => {
 export const deleteArticle = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const article = await Article.findByIdAndDelete(id);
+    const article = await Article.findOneAndDelete({ ID_Article: id });
 
     if (!article) {
       return res.status(404).json({ error: 'Article not found' });

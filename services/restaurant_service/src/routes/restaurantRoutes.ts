@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import { createRestaurant, getRestaurants, updateRestaurant, deleteRestaurant, getRestaurantsByRestaurateur, getRestaurantsByLocation, getRestaurantsBySearchAndLocation, 
-  getRestaurantsBySearchLocationAndCategory } from '../controllers/restaurantController';
+import { createRestaurant, getRestaurants, getRestaurantByID, updateRestaurant, deleteRestaurant, getRestaurantsByRestaurateur, getRestaurantsByLocation, 
+  getRestaurantsBySearchAndLocation, getRestaurantsBySearchLocationAndCategory } from '../controllers/restaurantController';
 
 const router = Router();
 
@@ -19,6 +19,7 @@ const upload = multer({ storage: storage });
 
 router.post('/restaurants', upload.single('image'), createRestaurant);
 router.get('/restaurants', getRestaurants);
+router.get('/restaurants/:id', getRestaurantByID);
 router.get('/restaurants/location', getRestaurantsByLocation);
 router.get('/restaurants/nameLocation', getRestaurantsBySearchAndLocation);
 router.get('/restaurants/nameLocationCategory', getRestaurantsBySearchLocationAndCategory);

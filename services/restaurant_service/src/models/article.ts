@@ -6,6 +6,7 @@ interface IArticle extends Document {
   ID_Restaurant: number;
   article_Name: string;
   image: string; // Ajouter un champ pour stocker l'image
+  price: number;
 }
 
 const articleSchema: Schema = new Schema({
@@ -15,7 +16,8 @@ const articleSchema: Schema = new Schema({
   },
   ID_Restaurant: {
     type: Number,
-    required: true
+    required: false,
+    unique: false
   },
   article_Name: {
     type: String,
