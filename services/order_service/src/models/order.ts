@@ -8,7 +8,9 @@ interface IOrder extends Document {
   ID_DeliveryMan: number;
   price: number;
   articles: number[]; // Champ pour stocker les IDs des articles
+  menus: number[];
   state: string;
+  validation_Code: string;
 }
 
 const orderSchema: Schema = new Schema({
@@ -31,7 +33,13 @@ const orderSchema: Schema = new Schema({
   articles: [{
     type: Number,
   }],
+  menus: [{
+    type: Number,
+  }],
   state: {
+    type: String,
+  },
+  validation_Code: {
     type: String,
   }
 });

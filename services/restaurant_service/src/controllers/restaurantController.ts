@@ -66,6 +66,21 @@ export const getRestaurants = async (req: Request, res: Response) => {
   }
 };
 
+export const getRestaurantByID = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const restaurants = await Restaurant.findOne({ ID_Restaurant: id });
+
+    if (!restaurants) {
+      return res.status(404).json({ error: 'Restaurant not found' });
+    }
+
+    res.status(200).json(restaurants);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   const toRad = (x: number) => (x * Math.PI) / 180;
 

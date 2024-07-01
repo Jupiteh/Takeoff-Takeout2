@@ -67,7 +67,7 @@ function DeliveryRequestPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await orderApi.get(`/orders/deliveryman/${deliveryManId}`);
+        const response = await orderApi.get(`/orders/accepted`);
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);

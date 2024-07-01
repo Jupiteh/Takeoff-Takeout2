@@ -75,7 +75,7 @@ function OrderPage() {
         const menuIds = cartOrOrder.menus;
 
         const articlesPromises = articleIds.map(id => restaurantApi.get(`/articles/${id}`));
-        const menusPromises = menuIds.map(id => restaurantApi.get(`/menus/${id}`));
+        const menusPromises = menuIds.map(id => restaurantApi.get(`/menusid/${id}`));
 
         const articlesResponses = await Promise.all(articlesPromises);
         const menusResponses = await Promise.all(menusPromises);
