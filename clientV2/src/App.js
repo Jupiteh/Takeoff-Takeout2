@@ -8,6 +8,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import AppAppBar from './components/layout/AppAppBar';
 import getDesignTokens from './theme';
+import RestaurantsPage from './pages/RestaurantPage';
 
 function App() {
   const [mode, setMode] = React.useState('light');
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={<HomePage mode={mode} toggleColorMode={toggleColorMode} />} />
           <Route path="/login" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/restaurants" component={RestaurantsPage} />
         </Routes>
       </Router>
     </ThemeProvider>
