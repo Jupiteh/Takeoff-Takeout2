@@ -50,7 +50,7 @@ export const updateMenu = async (req: Request, res: Response) => {
   }
 };
 
-export const getMenu = async (req: Request, res: Response) => {
+export const getMenuByRestaurant = async (req: Request, res: Response) => {
   try {
     const { restaurantId } = req.params;
     const menu = await Menu.find({ ID_Restaurant: restaurantId });

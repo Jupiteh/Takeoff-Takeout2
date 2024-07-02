@@ -29,6 +29,19 @@ export const getArticles = async (req: Request, res: Response) => {
   }
 };
 
+export const getArticlesByRestaurant = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId } = req.params;
+    const article = await Article.find({ ID_Restaurant: restaurantId });
+    if (!article || article.length === 0) {
+      return res.status(404).json({ message: 'Articles not found' });
+    }
+    res.status(200).json(article);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const getArticleById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
