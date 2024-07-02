@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import { createArticle, getArticles, updateArticle, deleteArticle, createMenuArticle, getArticleById } from '../controllers/articleController';
+import { createArticle, getArticles, updateArticle, deleteArticle, createMenuArticle, getArticleById, getArticlesByRestaurant } from '../controllers/articleController';
 
 const router = Router();
 
@@ -19,6 +19,7 @@ const upload = multer({ storage: storage });
 router.post('/articles', upload.single('image'), createArticle);
 router.get('/articles', getArticles);
 router.get('/articles/:id', getArticleById);
+router.get('/articlesbyRestaurant/:restaurantId', getArticlesByRestaurant);
 router.put('/articles/:id', upload.single('image'), updateArticle);
 router.delete('/articles/:id', deleteArticle);
 router.post('/menu-articles', createMenuArticle);

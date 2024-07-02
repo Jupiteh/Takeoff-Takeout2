@@ -60,3 +60,53 @@ export const getUsers = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error fetching users', error: err.message });
     }
 };
+
+export const updateUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { username, password, email, role } = req.body;
+    try {
+        const updates: any = { username, email, role };
+        if (password) {
+            updates.password = await bcrypt.hash(password, 10);
+        }
+        const updatedUser = await User.findOneAndUpdate({ ID_User: Number(id) }, updates, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        await logMessage(`User updated: ${username}`, 'info');
+        res.status(200).json(updatedUser);
+    } catch (err: any) {
+        await logMessage(`Failed update attempt for user ID: ${id}`, 'warn');
+        res.status(500).json({ message: 'Error updating user', error: err.message });
+    }
+};
+
+export const deleteUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const deletedUser = await User.findOneAndDelete({ ID_User: Number(id) });
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        await logMessage(`User deleted: ${deletedUser.username}`, 'info');
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (err: any) {
+        await logMessage(`Failed delete attempt for user ID: ${id}`, 'warn');
+        res.status(500).json({ message: 'Error deleting user', error: err.message });
+    }
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findOne({ ID_User: Number(id) }).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        await logMessage(`Fetched user by ID: ${id}`, 'info');
+        res.status(200).json(user);
+    } catch (err: any) {
+        await logMessage(`Error fetching user by ID: ${id}`, 'error');
+        res.status(500).json({ message: 'Error fetching user', error: err.message });
+    }
+};
