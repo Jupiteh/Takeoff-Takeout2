@@ -232,9 +232,11 @@ function AppAppBar({ mode, toggleColorMode }) {
               <IconButton sx={{ color: theme.palette.text.primary }}>
                 <NotificationsIcon />
               </IconButton>
-              <IconButton component={Link} to="/profile" sx={{ color: theme.palette.text.primary }}>
-                <AccountCircleIcon />
-              </IconButton>
+              {token && (
+                <IconButton component={Link} to="/profile" sx={{ color: theme.palette.text.primary }}>
+                  <AccountCircleIcon />
+                </IconButton>
+              )}
               {token ? (
                 <Button
                   color="primary"

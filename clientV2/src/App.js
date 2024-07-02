@@ -11,7 +11,7 @@ import getDesignTokens from './theme';
 import RestaurantsPage from './pages/RestaurantPage';
 import ProfilePage from './pages/ProfilPage';
 import RestaurantManagement from './pages/RestaurantManagement';
-
+import LandingPage from './pages/HomePage'; 
 function App() {
   const [mode, setMode] = React.useState('light');
 
@@ -28,7 +28,7 @@ function App() {
       <Router>
         <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
         <Routes>
-          <Route path="/" element={<HomePage mode={mode} toggleColorMode={toggleColorMode} />} />
+          <Route path="/" element={<LandingPage mode={mode} toggleColorMode={toggleColorMode} />} />
           <Route path="/login" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/restaurants" element={<RestaurantsPage />} />
