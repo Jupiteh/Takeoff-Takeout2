@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,6 +18,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { clearUser } from '../../redux/userSlice';
 
 const logoStyle = {
   width: '100px',
@@ -27,9 +27,10 @@ const logoStyle = {
 };
 
 function AppAppBar({ mode, toggleColorMode }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { role } = useSelector((state) => state.user);
+  const { role, token } = useSelector((state) => state.user);
   const theme = useTheme();
 
   const toggleDrawer = (newOpen) => () => {
@@ -42,6 +43,10 @@ function AppAppBar({ mode, toggleColorMode }) {
 
   const handleMoreClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(clearUser());
   };
 
   const scrollToSection = (sectionId) => {
@@ -226,26 +231,40 @@ function AppAppBar({ mode, toggleColorMode }) {
               <IconButton component={Link} to="/profile" sx={{ color: theme.palette.text.primary }}>
                 <AccountCircleIcon />
               </IconButton>
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component={Link}
-                to="/login"
-                sx={{ color: theme.palette.text.primary }}
-              >
-                Se connecter
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component={Link}
-                to="/signup"
-                sx={{ color: theme.palette.text.primary }}
-              >
-                S'inscrire
-              </Button>
+              {token ? (
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  onClick={handleLogout}
+                  sx={{ color: theme.palette.text.primary }}
+                >
+                  Se déconnecter
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    size="small"
+                    component={Link}
+                    to="/login"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
+                    Se connecter
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    component={Link}
+                    to="/signup"
+                    sx={{ color: theme.palette.text.primary }}
+                  >
+                    S'inscrire
+                  </Button>
+                </>
+              )}
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button
@@ -278,28 +297,43 @@ function AppAppBar({ mode, toggleColorMode }) {
                   </Box>
                   {renderMenuItems()}
                   <Divider />
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      component={Link}
-                      to="/signup"
-                      sx={{ width: '100%', color: theme.palette.text.primary }}
-                    >
-                      S'inscrire
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      component={Link}
-                      to="/login"
-                      sx={{ width: '100%', color: theme.palette.text.primary }}
-                    >
-                      Se connecter
-                    </Button>
-                  </MenuItem>
+                  {token ? (
+                    <MenuItem>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={handleLogout}
+                        sx={{ width: '100%', color: theme.palette.text.primary }}
+                      >
+                        Se déconnecter
+                      </Button>
+                    </MenuItem>
+                  ) : (
+                    <>
+                      <MenuItem>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          component={Link}
+                          to="/signup"
+                          sx={{ width: '100%', color: theme.palette.text.primary }}
+                        >
+                          S'inscrire
+                        </Button>
+                      </MenuItem>
+                      <MenuItem>
+                        <Button
+                          color="primary"
+                          variant="outlined"
+                          component={Link}
+                          to="/login"
+                          sx={{ width: '100%', color: theme.palette.text.primary }}
+                        >
+                          Se connecter
+                        </Button>
+                      </MenuItem>
+                    </>
+                  )}
                 </Box>
               </Drawer>
             </Box>

@@ -5,7 +5,6 @@ const initialState = {
   user: null,
   email: null,
   role: null,
-  photo: null,
   token: null,
 };
 
@@ -19,23 +18,20 @@ const userSlice = createSlice({
 
       // Décoder le token pour extraire les informations
       const decodedToken = jwtDecode(token);
-      state.user = decodedToken.user;
+      state.user = decodedToken.username;
       state.email = decodedToken.email;
       state.role = decodedToken.role;
-      state.photo = decodedToken.photo;
     },
     clearUser(state) {
       state.user = null;
       state.role = null;
       state.token = null;
       state.email = null;
-      state.photo = null;
     },
     updateProfile(state, action) {
-      state.user = action.payload.pseudo;
+      state.user = action.payload.username;
       state.email = action.payload.email;
       state.role = action.payload.role;
-      state.photo = action.payload.photo;
     }
   },
 });

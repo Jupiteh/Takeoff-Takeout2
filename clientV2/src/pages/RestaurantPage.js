@@ -22,12 +22,10 @@ export default function RestaurantListPage() {
     fetch(`http://localhost:8080/api/restaurants/location?latitude=${latitude}&longitude=${longitude}`)
       .then(response => response.json())
       .then(data => {
-        console.log('Fetched restaurants data:', data); // Log de la réponse de l'API
-        // Assurez-vous que `data` est un tableau
         if (Array.isArray(data)) {
           setRestaurants(data);
         } else {
-          console.error('Expected an array but got:', data);
+          console.error('Data is not an array:', data);
         }
       })
       .catch(error => console.error('Error fetching restaurants:', error));
@@ -41,16 +39,14 @@ export default function RestaurantListPage() {
     setCategory(category);
   };
 
-  const filteredRestaurants = Array.isArray(restaurants)
-    ? restaurants.filter(restaurant => 
-        restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (category ? restaurant.category === category : true)
-      )
-    : [];
+  const filteredRestaurants = restaurants.filter(restaurant => 
+    restaurant.nom_Restaurant && restaurant.nom_Restaurant.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (category ? restaurant.category === category : true)
+  );
 
   return (
     <Container>
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 12 }}> {/* Ajustement de la marge supérieure pour éviter le chevauchement avec AppBar */}
         <Typography variant="h4" gutterBottom>
           Restaurants disponibles
         </Typography>
@@ -81,20 +77,25 @@ export default function RestaurantListPage() {
         </Box>
         <Grid container spacing={4}>
           {filteredRestaurants.map((restaurant) => (
-            <Grid item key={restaurant.id} xs={12} sm={6} md={4}>
+            <Grid item key={restaurant.ID_Restaurant} xs={12} sm={6} md={4}>
               <Card>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={restaurant.image}
-                  alt={restaurant.name}
-                />
+                {restaurant.image && (
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={`http://localhost:3001/${restaurant.image}`}
+                    alt={restaurant.nom_Restaurant}
+                  />
+                )}
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {restaurant.name}
+                    {restaurant.nom_Restaurant || 'Nom non disponible'}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {restaurant.description}
+                    {restaurant.adresse || 'Adresse non disponible'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {restaurant.category || 'Catégorie non disponible'}
                   </Typography>
                 </CardContent>
               </Card>
