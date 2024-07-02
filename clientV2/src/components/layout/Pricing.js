@@ -1,5 +1,3 @@
-// src/pages/Pricing.js
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,10 +17,9 @@ const tiers = [
     title: 'Gratuit',
     price: '0',
     description: [
-      '10 utilisateurs inclus',
-      '2 Go de stockage',
-      'Accès au centre d’aide',
-      'Support par email',
+      'Commandes illimitées',
+      'Suivi de livraison en temps réel',
+      'Accès à l\'assistance',
     ],
     buttonText: 'Inscrivez-vous gratuitement',
     buttonVariant: 'outlined',
@@ -32,12 +29,10 @@ const tiers = [
     subheader: 'Recommandé',
     price: '15',
     description: [
-      '20 utilisateurs inclus',
-      '10 Go de stockage',
-      'Accès au centre d’aide',
-      'Support par email prioritaire',
-      'Équipe dédiée',
-      'Meilleures offres',
+      'Commandes prioritaires',
+      'Suivi premium',
+      'Support prioritaire',
+      'Offres spéciales',
     ],
     buttonText: 'Commencez maintenant',
     buttonVariant: 'contained',
@@ -46,10 +41,9 @@ const tiers = [
     title: 'Entreprise',
     price: '30',
     description: [
-      '50 utilisateurs inclus',
-      '30 Go de stockage',
-      'Accès au centre d’aide',
-      'Support téléphonique et par email',
+      'Commandes express',
+      'Gestion des comptes',
+      'Support dédié',
     ],
     buttonText: 'Contactez-nous',
     buttonVariant: 'outlined',
@@ -80,8 +74,7 @@ export default function Pricing() {
           Tarification
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Créez rapidement une table de tarification efficace pour vos clients potentiels avec cette mise en page. <br />
-          Elle est construite avec les composants Material UI par défaut avec peu de personnalisation.
+          Choisissez le plan qui correspond le mieux à vos besoins. Profitez d'une livraison rapide et efficace.
         </Typography>
       </Box>
       <Grid container spacing={3} alignItems="center" justifyContent="center">

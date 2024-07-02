@@ -23,6 +23,7 @@ export default function Hero() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        textAlign: 'center',
       })}
     >
       <Container
@@ -30,11 +31,12 @@ export default function Hero() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
           pt: { xs: 14, sm: 20 },
           pb: { xs: 8, sm: 12 },
         }}
       >
-        <Stack spacing={2} useFlexGap sx={{ width: { xs: '100%', sm: '70%' } }}>
+        <Stack spacing={2} useFlexGap sx={{ width: { xs: '100%', sm: '70%' }, textAlign: 'center' }}>
           <Typography
             variant="h1"
             sx={{
@@ -52,15 +54,15 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              meilleurs restaurants près de chez vous!
+              meilleurs restaurants!
             </Typography>
           </Typography>
           <Typography
             textAlign="center"
             color="text.secondary"
-            sx={{ width: { sm: '100%', md: '80%' } }}
+            sx={{ width: { sm: '100%', md: '80%' }, margin: '0 auto' }}
           >
-            Entrez votre adresse pour commencer une aventure culinaire incroyable! Nous vous connectons aux meilleurs restaurants locaux, prêts à vous livrer des repas délicieux directement à votre porte.
+            Entrez votre adresse pour une aventure culinaire incroyable! Nous vous connectons aux meilleurs restaurants locaux.
           </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -100,10 +102,7 @@ export default function Hero() {
             alignSelf: 'center',
             height: { xs: 200, sm: 700 },
             width: '100%',
-            backgroundImage:
-              theme.palette.mode === 'light'
-                ? 'url("/static/images/templates/templates-images/hero-light.png")'
-                : 'url("/static/images/templates/templates-images/hero-dark.png")',
+            backgroundImage: `url(${require('../../assets/image/background.webp')})`,
             backgroundSize: 'cover',
             borderRadius: '10px',
             outline: '1px solid',

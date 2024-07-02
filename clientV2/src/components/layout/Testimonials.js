@@ -11,40 +11,40 @@ import { useTheme } from '@mui/system';
 
 const userTestimonials = [
   {
-    avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />,
-    name: 'Remy Sharp',
-    occupation: 'Ingénieur Senior',
-    testimonial: "J'adore la polyvalence de ce produit ! Que je m'attaque à des projets de travail ou que je me plonge dans mes loisirs préférés, il s'adapte parfaitement à mes besoins changeants. Son design intuitif a vraiment amélioré ma routine quotidienne, rendant les tâches plus efficaces et agréables.",
+    avatar: <Avatar alt="Alice" src="/static/images/avatar/1.jpg" />,
+    name: 'Alice',
+    occupation: 'Client',
+    testimonial: "Service rapide et repas délicieux. Je recommande vivement!",
   },
   {
-    avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />,
-    name: 'Travis Howard',
-    occupation: 'Concepteur Principal de Produit',
-    testimonial: "L'un des points forts de ce produit est le support client exceptionnel. Dans mon expérience, l'équipe derrière ce produit a été rapide à répondre et incroyablement utile. C'est rassurant de savoir qu'ils soutiennent fermement leur produit.",
+    avatar: <Avatar alt="Bob" src="/static/images/avatar/2.jpg" />,
+    name: 'Bob',
+    occupation: 'Client',
+    testimonial: "Toujours ponctuel et les plats sont toujours chauds.",
   },
   {
-    avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />,
-    name: 'Cindy Baker',
-    occupation: 'CTO',
-    testimonial: "Le niveau de simplicité et de convivialité de ce produit a considérablement simplifié ma vie. Je remercie les créateurs d'avoir livré une solution qui dépasse les attentes des utilisateurs.",
+    avatar: <Avatar alt="Carol" src="/static/images/avatar/3.jpg" />,
+    name: 'Carol',
+    occupation: 'Restaurateur',
+    testimonial: "Excellente plateforme pour atteindre plus de clients.",
   },
   {
-    avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/4.jpg" />,
-    name: 'Julia Stewart',
-    occupation: 'Ingénieur Senior',
-    testimonial: "J'apprécie l'attention portée aux détails dans la conception de ce produit. Les petites touches font une grande différence, et il est évident que les créateurs se sont concentrés sur la livraison d'une expérience premium.",
+    avatar: <Avatar alt="Dave" src="/static/images/avatar/4.jpg" />,
+    name: 'Dave',
+    occupation: 'Livreur',
+    testimonial: "Livraisons bien organisées et support efficace.",
   },
   {
-    avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/5.jpg" />,
-    name: 'John Smith',
-    occupation: 'Concepteur de Produit',
-    testimonial: "J'ai essayé d'autres produits similaires, mais celui-ci se distingue par ses fonctionnalités innovantes. Il est clair que les créateurs ont mis beaucoup de réflexion pour créer une solution qui répond vraiment aux besoins des utilisateurs.",
+    avatar: <Avatar alt="Eve" src="/static/images/avatar/5.jpg" />,
+    name: 'Eve',
+    occupation: 'Client',
+    testimonial: "Grande variété de choix, toujours satisfaite.",
   },
   {
-    avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/6.jpg" />,
-    name: 'Daniel Wolf',
-    occupation: 'CDO',
-    testimonial: "La qualité de ce produit a dépassé mes attentes. Il est durable, bien conçu et construit pour durer. Définitivement un investissement qui vaut le coup!",
+    avatar: <Avatar alt="Frank" src="/static/images/avatar/6.jpg" />,
+    name: 'Frank',
+    occupation: 'Client',
+    testimonial: "Un service client au top et des repas de qualité.",
   },
 ];
 
@@ -98,7 +98,7 @@ export default function Testimonials() {
           Témoignages
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Découvrez ce que nos clients adorent dans notre service de livraison. Découvrez comment nous excellons en efficacité, durabilité et satisfaction. Rejoignez-nous pour une qualité, une innovation et un support fiable.
+          Découvrez ce que nos clients adorent dans notre service de livraison. Rejoignez-nous pour une qualité, une innovation et un support fiable.
         </Typography>
       </Box>
       <Grid container spacing={2}>

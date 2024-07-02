@@ -15,33 +15,33 @@ import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 const items = [
   {
     icon: <SettingsSuggestRoundedIcon />,
-    title: 'Performance adaptable',
-    description: 'Notre produit s\'adapte facilement à vos besoins, améliorant l\'efficacité et simplifiant vos tâches.',
+    title: 'Service rapide',
+    description: 'Livraison rapide pour que vos repas arrivent chauds et frais.',
   },
   {
     icon: <ConstructionRoundedIcon />,
-    title: 'Conçu pour durer',
-    description: 'Découvrez une durabilité inégalée qui va au-delà avec un investissement durable.',
+    title: 'Durabilité',
+    description: 'Emballages écologiques et réutilisables pour un avenir durable.',
   },
   {
     icon: <ThumbUpAltRoundedIcon />,
-    title: 'Excellente expérience utilisateur',
-    description: 'Intégrez notre produit dans votre routine avec une interface intuitive et facile à utiliser.',
+    title: 'Satisfaction garantie',
+    description: 'Votre satisfaction est notre priorité absolue.',
   },
   {
     icon: <AutoFixHighRoundedIcon />,
-    title: 'Fonctionnalité innovante',
-    description: 'Restez en avance avec des fonctionnalités qui établissent de nouvelles normes, répondant mieux à vos besoins en évolution.',
+    title: 'Innovation',
+    description: 'Technologie de pointe pour une expérience utilisateur améliorée.',
   },
   {
     icon: <SupportAgentRoundedIcon />,
-    title: 'Support fiable',
-    description: 'Comptez sur notre support client réactif, offrant une assistance qui va au-delà de l\'achat.',
+    title: 'Support 24/7',
+    description: 'Assistance client disponible à toute heure pour répondre à vos besoins.',
   },
   {
     icon: <QueryStatsRoundedIcon />,
-    title: 'Précision dans chaque détail',
-    description: 'Profitez d\'un produit méticuleusement conçu où les petites touches ont un impact significatif sur votre expérience globale.',
+    title: 'Précision',
+    description: 'Suivi en temps réel pour une livraison précise.',
   },
 ];
 
@@ -75,7 +75,7 @@ export default function Highlights() {
             Points forts
           </Typography>
           <Typography variant="body1" sx={{ color: 'grey.400' }}>
-            Découvrez pourquoi notre produit se distingue : adaptabilité, durabilité, conception conviviale et innovation. Profitez d'un support client fiable et de la précision dans chaque détail.
+            Découvrez pourquoi notre service de livraison de repas se distingue : rapidité, durabilité, satisfaction garantie, innovation, support 24/7 et précision.
           </Typography>
         </Box>
         <Grid container spacing={2.5}>

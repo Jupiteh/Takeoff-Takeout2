@@ -8,9 +8,11 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import FacebookIcon from '@mui/icons-material/GitHub';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/X';
+import TwitterIcon from '@mui/icons-material/Twitter';
+
+import logo from '../../assets/image/logo.png'; // Update with your logo path
 
 const logoStyle = {
   width: '140px',
@@ -21,7 +23,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
       {'Copyright © '}
-      <Link href="https://mui.com/">Sitemark&nbsp;</Link>
+      <Link href="/">Takeoff Takeout&nbsp;</Link>
       {new Date().getFullYear()}
     </Typography>
   );
@@ -58,18 +60,16 @@ export default function Footer() {
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
             <Box sx={{ ml: '-15px' }}>
               <img
-                src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
-                }
+                src={logo}
                 style={logoStyle}
-                alt="logo of sitemark"
+                alt="Takeoff Takeout logo"
               />
             </Box>
             <Typography variant="body2" fontWeight={600} gutterBottom>
               Newsletter
             </Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
-              Subscribe to our newsletter for weekly updates and promotions.
+              Abonnez-vous pour des mises à jour hebdomadaires et des promotions.
             </Typography>
             <Stack direction="row" spacing={1} useFlexGap>
               <TextField
@@ -78,15 +78,15 @@ export default function Footer() {
                 size="small"
                 variant="outlined"
                 fullWidth
-                aria-label="Enter your email address"
-                placeholder="Your email address"
+                aria-label="Entrez votre adresse email"
+                placeholder="Votre adresse email"
                 inputProps={{
                   autoComplete: 'off',
-                  'aria-label': 'Enter your email address',
+                  'aria-label': 'Entrez votre adresse email',
                 }}
               />
               <Button variant="contained" color="primary" sx={{ flexShrink: 0 }}>
-                Subscribe
+                S'abonner
               </Button>
             </Stack>
           </Box>
@@ -99,22 +99,22 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" fontWeight={600}>
-            Product
+            Produit
           </Typography>
           <Link color="text.secondary" href="#">
-            Features
+            Fonctionnalités
           </Link>
           <Link color="text.secondary" href="#">
-            Testimonials
+            Témoignages
           </Link>
           <Link color="text.secondary" href="#">
-            Highlights
+            Points forts
           </Link>
           <Link color="text.secondary" href="#">
-            Pricing
+            Tarification
           </Link>
           <Link color="text.secondary" href="#">
-            FAQs
+            FAQ
           </Link>
         </Box>
         <Box
@@ -125,16 +125,16 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" fontWeight={600}>
-            Company
+            Entreprise
           </Typography>
           <Link color="text.secondary" href="#">
-            About us
+            À propos de nous
           </Link>
           <Link color="text.secondary" href="#">
-            Careers
+            Carrières
           </Link>
           <Link color="text.secondary" href="#">
-            Press
+            Presse
           </Link>
         </Box>
         <Box
@@ -145,13 +145,13 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" fontWeight={600}>
-            Legal
+            Légal
           </Typography>
           <Link color="text.secondary" href="#">
-            Terms
+            Termes
           </Link>
           <Link color="text.secondary" href="#">
-            Privacy
+            Confidentialité
           </Link>
           <Link color="text.secondary" href="#">
             Contact
@@ -170,13 +170,13 @@ export default function Footer() {
       >
         <div>
           <Link color="text.secondary" href="#">
-            Privacy Policy
+            Politique de confidentialité
           </Link>
           <Typography display="inline" sx={{ mx: 0.5, opacity: 0.5 }}>
             &nbsp;•&nbsp;
           </Typography>
           <Link color="text.secondary" href="#">
-            Terms of Service
+            Conditions d'utilisation
           </Link>
           <Copyright />
         </div>

@@ -50,7 +50,7 @@ export default function FAQ() {
             id="panel1d-header"
           >
             <Typography component="h3" variant="subtitle2">
-              Comment contacter le support client en cas de question ou de problème ?
+              Comment contacter le support client ?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -59,9 +59,9 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Vous pouvez joindre notre équipe de support client par email à
+              Vous pouvez nous joindre par email à 
               <Link href="mailto:support@email.com"> support@email.com </Link>
-              ou en appelant notre numéro gratuit. Nous sommes là pour vous aider rapidement.
+              ou par téléphone au numéro gratuit. Nous sommes là pour vous aider.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -75,7 +75,7 @@ export default function FAQ() {
             id="panel2d-header"
           >
             <Typography component="h3" variant="subtitle2">
-              Puis-je retourner le produit s'il ne répond pas à mes attentes ?
+              Puis-je annuler une commande ?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -84,7 +84,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Absolument ! Nous offrons une politique de retour sans tracas. Si vous n'êtes pas entièrement satisfait, vous pouvez retourner le produit dans les [nombre de jours] jours pour un remboursement complet ou un échange.
+              Oui, vous pouvez annuler une commande dans les 10 minutes suivant la passation. Après ce délai, contactez notre support client.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -98,7 +98,7 @@ export default function FAQ() {
             id="panel3d-header"
           >
             <Typography component="h3" variant="subtitle2">
-              Qu'est-ce qui rend votre produit différent des autres sur le marché ?
+              Quels sont les modes de paiement acceptés ?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -107,7 +107,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Notre produit se distingue par son adaptabilité, sa durabilité et ses fonctionnalités innovantes. Nous priorisons la satisfaction de l'utilisateur et nous efforçons continuellement de dépasser les attentes dans tous les aspects.
+              Nous acceptons les cartes de crédit, PayPal et les paiements en espèces à la livraison.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -121,7 +121,7 @@ export default function FAQ() {
             id="panel4d-header"
           >
             <Typography component="h3" variant="subtitle2">
-              Le produit est-il garanti et que couvre-t-elle ?
+              Combien de temps prend la livraison ?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -130,7 +130,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Oui, notre produit est couvert par une garantie de [durée de la garantie]. Elle couvre les défauts de matériaux et de fabrication. Si vous rencontrez des problèmes couverts par la garantie, veuillez contacter notre support client pour assistance.
+              La livraison prend généralement entre 30 et 45 minutes selon la distance et l'heure de la commande.
             </Typography>
           </AccordionDetails>
         </Accordion>

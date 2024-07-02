@@ -1,4 +1,3 @@
-// src/pages/SignInPage.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,6 +14,10 @@ import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { jwtDecode } from 'jwt-decode'; // Importation correcte
+import { setUser } from '../redux/userSlice';
 
 function Copyright(props) {
   return (
@@ -31,6 +34,9 @@ function Copyright(props) {
 
 export default function SignInPage() {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -44,6 +50,13 @@ export default function SignInPage() {
     });
 
     if (response.ok) {
+      const result = await response.json();
+      const { token } = result;
+      const decodedToken = jwtDecode(token); // Utilisation correcte de jwtDecode
+      const { user, role } = decodedToken;
+
+      dispatch(setUser({ user, role, token }));
+
       toast.success('Connexion réussie!', {
         position: "top-right",
         autoClose: 5000,
@@ -53,6 +66,10 @@ export default function SignInPage() {
         draggable: true,
         progress: undefined,
       });
+
+      setTimeout(() => {
+        navigate('/');
+      }, 5000); // Rediriger après 5 secondes
     } else {
       toast.error('Échec de la connexion!', {
         position: "top-right",
