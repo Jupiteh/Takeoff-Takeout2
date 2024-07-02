@@ -10,12 +10,15 @@ COPY package*.json ./
 # Installer les dépendances
 RUN npm install
 
+# Installer nodemon globalement
+RUN npm install -g nodemon ts-node
+
 # Copier tout le reste des fichiers de l'application
 COPY . .
 
 # Créer le dossier uploads
 RUN mkdir -p uploads
-RUN npm install typescript -g  # Ensure typescript is installed globally
+RUN npm install typescript -g
 # Compiler le code TypeScript
 RUN npx tsc
 
@@ -23,4 +26,5 @@ RUN npx tsc
 EXPOSE 3001
 
 # Démarrer l'application
-CMD ["node", "dist/index.js"]
+CMD ["nodemon", "--watch", "src", "--exec", "ts-node", "src/index.ts", "--verbose"]
+# CMD ["node", "dist/index.js"]

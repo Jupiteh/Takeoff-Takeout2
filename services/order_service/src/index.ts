@@ -4,11 +4,14 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import orderRoutes from './routes/orderRoutes';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3003;
+
+app.use(bodyParser.json());
 
 app.use(cors());
 app.use(express.json());

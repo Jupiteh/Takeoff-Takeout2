@@ -3,6 +3,15 @@ import Menu from '../models/menu';
 import MenuArticle from '../models/menuArticle';
 import mongoose from 'mongoose';
 
+export const getMenus = async (req: Request, res: Response) => {
+  try {
+    const menu = await Menu.find();
+    res.status(200).json(menu);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const createMenu = async (req: Request, res: Response) => {
   try {
     const { ID_Restaurant, menu_Name, price } = req.body;
@@ -48,6 +57,21 @@ export const getMenu = async (req: Request, res: Response) => {
     if (!menu || menu.length === 0) {
       return res.status(404).json({ message: 'Menu not found' });
     }
+    res.status(200).json(menu);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const getMenuById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const menu = await Menu.findOne({ ID_Menu: id });
+
+    if (!menu) {
+      return res.status(404).json({ error: 'Menu not found' });
+    }
+
     res.status(200).json(menu);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
