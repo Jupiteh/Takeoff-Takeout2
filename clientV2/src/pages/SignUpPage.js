@@ -39,33 +39,90 @@ export default function SignUpPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const response = await fetch('http://localhost:8080/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: data.get('username'), // Assuming 'username' is used for 'pseudo'
-        password: data.get('password'),
-        email: data.get('email'),
-        role: data.get('role'),
-      }),
-    });
+    const payload = {
+      username: data.get('username'),
+      password: data.get('password'),
+      email: data.get('email'),
+      role: data.get('role'),
+    };
 
-    if (response.ok) {
-      const responseData = await response.json();
-      const { token } = responseData;
-      dispatch(setUser({ token }));
-      toast.success('Inscription réussie!', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+    try {
+      // Faire la requête de registre
+      const registerResponse = await fetch('http://localhost:8080/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      navigate('/');
-    } else {
-      toast.error("Échec de l'inscription!", {
+
+      if (registerResponse.ok) {
+        // Si l'inscription réussit, faire la requête de connexion
+        const loginResponse = await fetch('http://localhost:8080/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: payload.username,
+            password: payload.password,
+          }),
+        });
+
+        if (loginResponse.ok) {
+          const loginData = await loginResponse.json();
+          const { token } = loginData;
+
+          // Vérifiez si le token est une chaîne valide
+          if (typeof token === 'string') {
+            dispatch(setUser({ token }));
+            toast.success('Inscription réussie!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            navigate('/');
+          } else {
+            console.error("Le token reçu n'est pas valide :", token);
+            toast.error("Le token reçu n'est pas valide.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        } else {
+          const loginError = await loginResponse.json();
+          console.error("Erreur de connexion :", loginError);
+          toast.error("Échec de la connexion après inscription!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      } else {
+        const registerError = await registerResponse.json();
+        console.error("Erreur d'inscription :", registerError);
+        toast.error("Échec de l'inscription!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête :", error);
+      toast.error("Erreur lors de la requête!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

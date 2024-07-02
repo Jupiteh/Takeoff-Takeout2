@@ -8,7 +8,6 @@ const router = Router();
 router.post('/register', register);
 router.post('/login', login);
 
-<<<<<<< HEAD
 // Route protégée par JWT et rôle admin pour obtenir tous les utilisateurs
 // router.get('/users', authenticateJWT, authorizeRole(['admin']), getUsers);
 
@@ -16,10 +15,6 @@ router.get('/users', getUsers);
 router.get('/users/:id', getUserById);
 router.put('/users/:id', updateUserById);
 router.delete('/users/:id', deleteUserById);
-=======
-// POUR LES TEST PLUS SIMPLE PEUT ETRE SUPPRIME
-router.get('/users', getUsers);
->>>>>>> JUJU22
 
 // Routes protégées par rôle
 router.get('/admin', authenticateJWT, authorizeRole(['admin']), (req, res) => {
