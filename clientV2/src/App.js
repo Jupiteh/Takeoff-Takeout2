@@ -10,6 +10,7 @@ import AppAppBar from './components/layout/AppAppBar';
 import getDesignTokens from './theme';
 import RestaurantsPage from './pages/RestaurantPage';
 import ProfilePage from './pages/ProfilPage';
+import RestaurantManagement from './pages/RestaurantManagement';
 
 function App() {
   const [mode, setMode] = React.useState('light');
@@ -32,6 +33,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/restaurants" element={<RestaurantsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/restaurant-management" element={<RestaurantManagement />} />
         </Routes>
       </Router>
     </ThemeProvider>

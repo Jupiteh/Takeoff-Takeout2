@@ -1,4 +1,3 @@
-// src/pages/SignUpPage.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,7 +13,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { setUser } from '../redux/userSlice'; // Assurez-vous que le chemin est correct
 
 function Copyright(props) {
   return (
@@ -31,6 +33,9 @@ function Copyright(props) {
 
 export default function SignUpPage() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,7 +43,7 @@ export default function SignUpPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: data.get('username'),
+        username: data.get('username'), // Assuming 'username' is used for 'pseudo'
         password: data.get('password'),
         email: data.get('email'),
         role: data.get('role'),
@@ -46,6 +51,9 @@ export default function SignUpPage() {
     });
 
     if (response.ok) {
+      const responseData = await response.json();
+      const { token } = responseData;
+      dispatch(setUser({ token }));
       toast.success('Inscription réussie!', {
         position: "top-right",
         autoClose: 5000,
@@ -55,6 +63,7 @@ export default function SignUpPage() {
         draggable: true,
         progress: undefined,
       });
+      navigate('/');
     } else {
       toast.error("Échec de l'inscription!", {
         position: "top-right",
@@ -87,25 +96,14 @@ export default function SignUpPage() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="Prénom"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="lastName"
-                label="Nom de famille"
-                name="lastName"
-                autoComplete="family-name"
+                name="username"
+                label="Pseudo"
+                id="username"
+                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>
@@ -116,16 +114,6 @@ export default function SignUpPage() {
                 label="Adresse Email"
                 name="email"
                 autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="username"
-                label="Nom d'utilisateur"
-                id="username"
-                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>

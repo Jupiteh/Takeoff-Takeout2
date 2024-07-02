@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response) => {
             await logMessage(`Failed login attempt for username: ${username}`, 'warn');
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        const token = generateToken(user._id, user.role);
+        const token = generateToken(user);  // Passez l'objet user complet
         await logMessage(`User logged in: ${username}`, 'info');
         res.json({ token });
     } catch (err: any) {

@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Assurez-vous d'importer useNavigate
 import Divider from '@mui/material/Divider';
 import logo from '../../assets/image/logo.png';
 import { useTheme } from '@mui/material/styles';
@@ -32,6 +32,7 @@ function AppAppBar({ mode, toggleColorMode }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { role, token } = useSelector((state) => state.user);
   const theme = useTheme();
+  const navigate = useNavigate(); // Ajoutez ceci pour utiliser la navigation
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -50,16 +51,20 @@ function AppAppBar({ mode, toggleColorMode }) {
   };
 
   const scrollToSection = (sectionId) => {
-    const sectionElement = document.getElementById(sectionId);
-    const offset = 128;
-    if (sectionElement) {
-      const targetScroll = sectionElement.offsetTop - offset;
-      sectionElement.scrollIntoView({ behavior: 'smooth' });
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth',
-      });
-      setOpen(false);
+    if (sectionId === 'restaurant-management') {
+      navigate('/restaurant-management'); // Navigation vers la page de gestion du restaurant
+    } else {
+      const sectionElement = document.getElementById(sectionId);
+      const offset = 128;
+      if (sectionElement) {
+        const targetScroll = sectionElement.offsetTop - offset;
+        sectionElement.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({
+          top: targetScroll,
+          behavior: 'smooth',
+        });
+        setOpen(false);
+      }
     }
   };
 
@@ -76,14 +81,13 @@ function AppAppBar({ mode, toggleColorMode }) {
         break;
       case 'restaurateur':
         items = [
-          { label: 'Gérer Articles', section: 'articles' },
-          { label: 'Gérer Menus', section: 'menus' },
+          { label: 'Mon Espace Restaurant', section: 'restaurant-management' },
           { label: 'Visualiser Commandes', section: 'orders' },
           { label: 'Statistiques', section: 'statistics' },
           { label: 'Historique', section: 'history' },
           { label: 'Parrainer', section: 'referral' }
         ];
-        break;
+        break;        
       case 'livreur':
         items = [
           { label: 'Accepter Livraisons', section: 'deliveries' },

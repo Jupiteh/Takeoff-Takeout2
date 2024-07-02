@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Utiliser l'importation nommée
 
 const initialState = {
   user: null,
   email: null,
   role: null,
   token: null,
+  userId: null, // ID_User sera stocké ici
 };
 
 const userSlice = createSlice({
@@ -21,12 +22,14 @@ const userSlice = createSlice({
       state.user = decodedToken.username;
       state.email = decodedToken.email;
       state.role = decodedToken.role;
+      state.userId = decodedToken.ID_User; // Extraction du champ ID_User
     },
     clearUser(state) {
       state.user = null;
       state.role = null;
       state.token = null;
       state.email = null;
+      state.userId = null;
     },
     updateProfile(state, action) {
       state.user = action.payload.username;

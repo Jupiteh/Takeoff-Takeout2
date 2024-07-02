@@ -1,7 +1,16 @@
 import jwt from 'jsonwebtoken';
+import { IUser } from '../models/user';
 
-export const generateToken = (userId: string, role: string) => {
-    return jwt.sign({ userId, role }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+export const generateToken = (user: IUser) => {
+    const payload = {
+        userId: user._id,
+        ID_User: user.ID_User, // Ajoutez ce champ
+        username: user.username,
+        email: user.email,
+        role: user.role
+    };
+
+    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
 };
 
 export const verifyToken = (token: string) => {
