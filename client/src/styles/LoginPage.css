@@ -1,0 +1,79 @@
+/* LoginPage.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #2b3e50, #3e4e60);
+    color: white;
+    padding: 20px;
+  }
+  
+  .title {
+    margin-bottom: 20px;
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeInDown 1s ease;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 300px;
+    border: 2px solid #f0ad4e;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transition: border 0.3s;
+  }
+  
+  .input:focus {
+    border: 2px solid #f0ad4e;
+    outline: none;
+  }
+  
+  .button {
+    padding: 10px;
+    margin: 10px 0;
+    width: 320px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0ad4e;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  
+  .button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+  
+  .errorMessage {
+    color: #ff6b6b;
+    margin: 10px 0;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

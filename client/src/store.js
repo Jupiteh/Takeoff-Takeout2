@@ -1,11 +1,11 @@
-// src/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './features/user/userSlice'; // Importez votre reducer utilisateur
+import userReducer from './features/user/userSlice';
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    user: userReducer, // Ajoutez votre reducer ici
+    user: userReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production', // Enable Redux DevTools only in development
 });
 
 export default store;
