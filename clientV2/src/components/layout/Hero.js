@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -7,8 +7,42 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
+  const [address, setAddress] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (address.length > 3) {
+      fetch(`https://api-adresse.data.gouv.fr/search/?q=${address}&limit=5`)
+        .then(response => response.json())
+        .then(data => {
+          setSuggestions(data.features.map(feature => feature.properties.label));
+        })
+        .catch(error => {
+          console.error('Error fetching address suggestions:', error);
+        });
+    }
+  }, [address]);
+
+  const handleSearch = () => {
+    const selected = suggestions.find(suggestion => suggestion === address);
+    if (selected) {
+      fetch(`https://api-adresse.data.gouv.fr/search/?q=${selected}&limit=1`)
+        .then(response => response.json())
+        .then(data => {
+          const coordinates = data.features[0].geometry.coordinates;
+          navigate(`/restaurants?latitude=${coordinates[1]}&longitude=${coordinates[0]}`);
+        })
+        .catch(error => {
+          console.error('Error fetching geocode data:', error);
+        });
+    }
+  };
+
   return (
     <Box
       id="hero"
@@ -71,19 +105,48 @@ export default function Hero() {
             useFlexGap
             sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}
           >
-            <TextField
-              id="outlined-basic"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Entrez votre adresse email"
-              placeholder="Votre adresse"
-              inputProps={{
-                autoComplete: 'off',
-                'aria-label': 'Entrez votre adresse email',
-              }}
+            <Autocomplete
+              freeSolo
+              options={suggestions}
+              inputValue={address}
+              onInputChange={(event, newInputValue) => setAddress(newInputValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  id="outlined-basic"
+                  hiddenLabel
+                  size="small"
+                  variant="outlined"
+                  placeholder="Votre adresse"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: 'off', // désactiver l'autocomplétion du navigateur
+                    'aria-label': 'Entrez votre adresse',
+                  }}
+                  sx={{
+                    width: '400px', // Définissez une largeur fixe pour la barre de recherche
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                      backgroundColor: 'background.paper',
+                      '& fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: 'primary.dark',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'primary.dark',
+                      },
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: '12px 16px',
+                      fontSize: '1.2rem', // Taille de la police plus grande
+                    },
+                  }}
+                />
+              )}
             />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleSearch} sx={{ height: 'fit-content', px: 4 }}>
               Trouvez des restaurants
             </Button>
           </Stack>

@@ -11,23 +11,37 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import { Link } from 'react-router-dom';
-import Divider from '@mui/material/Divider'; 
-import logo from '../../assets/image/logo.png'; 
-import { useTheme } from '@mui/material/styles'; // Ajouté l'importation du thème
+import Divider from '@mui/material/Divider';
+import logo from '../../assets/image/logo.png';
+import { useTheme } from '@mui/material/styles';
+import Menu from '@mui/material/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const logoStyle = {
-  width: '100px', // Ajustez la largeur selon vos besoins
+  width: '100px',
   height: '50px',
   cursor: 'pointer',
 };
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const { role } = useSelector((state) => state.user);
-  const theme = useTheme(); // Utilisation du thème
+  const theme = useTheme();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const handleMoreClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMoreClose = () => {
+    setAnchorEl(null);
   };
 
   const scrollToSection = (sectionId) => {
@@ -45,60 +59,102 @@ function AppAppBar({ mode, toggleColorMode }) {
   };
 
   const renderMenuItems = () => {
+    let items = [];
     switch (role) {
       case 'client':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('features')} sx={{ color: theme.palette.text.primary }}>Créer Commande</MenuItem>
-            <MenuItem onClick={() => scrollToSection('history')} sx={{ color: theme.palette.text.primary }}>Historique</MenuItem>
-            <MenuItem onClick={() => scrollToSection('tracking')} sx={{ color: theme.palette.text.primary }}>Suivi Livraison</MenuItem>
-            <MenuItem onClick={() => scrollToSection('notifications')} sx={{ color: theme.palette.text.primary }}>Notifications</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'Créer Commande', section: 'features' },
+          { label: 'Historique', section: 'history' },
+          { label: 'Suivi Livraison', section: 'tracking' },
+          { label: 'Notifications', section: 'notifications' }
+        ];
+        break;
       case 'restaurateur':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('articles')} sx={{ color: theme.palette.text.primary }}>Gérer Articles</MenuItem>
-            <MenuItem onClick={() => scrollToSection('menus')} sx={{ color: theme.palette.text.primary }}>Gérer Menus</MenuItem>
-            <MenuItem onClick={() => scrollToSection('orders')} sx={{ color: theme.palette.text.primary }}>Visualiser Commandes</MenuItem>
-            <MenuItem onClick={() => scrollToSection('statistics')} sx={{ color: theme.palette.text.primary }}>Statistiques</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'Gérer Articles', section: 'articles' },
+          { label: 'Gérer Menus', section: 'menus' },
+          { label: 'Visualiser Commandes', section: 'orders' },
+          { label: 'Statistiques', section: 'statistics' },
+          { label: 'Historique', section: 'history' },
+          { label: 'Parrainer', section: 'referral' }
+        ];
+        break;
       case 'livreur':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('deliveries')} sx={{ color: theme.palette.text.primary }}>Accepter Livraisons</MenuItem>
-            <MenuItem onClick={() => scrollToSection('tracking')} sx={{ color: theme.palette.text.primary }}>Suivi Livraison</MenuItem>
-            <MenuItem onClick={() => scrollToSection('notifications')} sx={{ color: theme.palette.text.primary }}>Notifications</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'Accepter Livraisons', section: 'deliveries' },
+          { label: 'Suivi Livraison', section: 'tracking' },
+          { label: 'Notifications', section: 'notifications' }
+        ];
+        break;
       case 'developpeur':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('api')} sx={{ color: theme.palette.text.primary }}>API</MenuItem>
-            <MenuItem onClick={() => scrollToSection('components')} sx={{ color: theme.palette.text.primary }}>Composants Disponibles</MenuItem>
-            <MenuItem onClick={() => scrollToSection('downloads')} sx={{ color: theme.palette.text.primary }}>Télécharger Composants</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'API', section: 'api' },
+          { label: 'Composants Disponibles', section: 'components' },
+          { label: 'Télécharger Composants', section: 'downloads' }
+        ];
+        break;
       case 'commercial':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('clients')} sx={{ color: theme.palette.text.primary }}>Gérer Comptes Clients</MenuItem>
-            <MenuItem onClick={() => scrollToSection('dashboard')} sx={{ color: theme.palette.text.primary }}>Tableaux de Bord</MenuItem>
-            <MenuItem onClick={() => scrollToSection('notifications')} sx={{ color: theme.palette.text.primary }}>Notifications</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'Gérer Comptes Clients', section: 'clients' },
+          { label: 'Tableaux de Bord', section: 'dashboard' },
+          { label: 'Notifications', section: 'notifications' }
+        ];
+        break;
       case 'technique':
-        return (
-          <>
-            <MenuItem onClick={() => scrollToSection('logs')} sx={{ color: theme.palette.text.primary }}>Consulter Logs</MenuItem>
-            <MenuItem onClick={() => scrollToSection('performance')} sx={{ color: theme.palette.text.primary }}>Statistiques de Performances</MenuItem>
-            <MenuItem onClick={() => scrollToSection('deploy')} sx={{ color: theme.palette.text.primary }}>Déploiement Services</MenuItem>
-          </>
-        );
+        items = [
+          { label: 'Consulter Logs', section: 'logs' },
+          { label: 'Statistiques de Performances', section: 'performance' },
+          { label: 'Déploiement Services', section: 'deploy' }
+        ];
+        break;
       default:
         return null;
     }
+
+    return (
+      <>
+        {items.slice(0, 5).map((item, index) => (
+          <MenuItem
+            key={index}
+            onClick={() => scrollToSection(item.section)}
+            sx={{ color: theme.palette.text.primary }}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+        {items.length > 5 && (
+          <>
+            <MenuItem
+              aria-controls="more-menu"
+              aria-haspopup="true"
+              onClick={handleMoreClick}
+              sx={{ color: theme.palette.text.primary }}
+            >
+              <MoreVertIcon />
+            </MenuItem>
+            <Menu
+              id="more-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleMoreClose}
+            >
+              {items.slice(5).map((item, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={() => {
+                    handleMoreClose();
+                    scrollToSection(item.section);
+                  }}
+                >
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Menu>
+          </>
+        )}
+      </>
+    );
   };
 
   return (
@@ -146,9 +202,10 @@ function AppAppBar({ mode, toggleColorMode }) {
             >
               <Box sx={{ width: '100px', height: '40px', overflow: 'hidden' }}>
                 <img
-                  src={logo} // Utilisez le logo importé ici
+                  src={logo}
                   style={logoStyle}
                   alt="logo of Takeoff Takeout"
+                  onClick={() => window.location.href = '/'}
                 />
               </Box>
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -163,13 +220,19 @@ function AppAppBar({ mode, toggleColorMode }) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+              <IconButton sx={{ color: theme.palette.text.primary }}>
+                <NotificationsIcon />
+              </IconButton>
+              <IconButton component={Link} to="/profile" sx={{ color: theme.palette.text.primary }}>
+                <AccountCircleIcon />
+              </IconButton>
               <Button
                 color="primary"
                 variant="text"
                 size="small"
                 component={Link}
                 to="/login"
-                sx={{ color: theme.palette.text.primary }} // Assurez-vous que le texte est visible
+                sx={{ color: theme.palette.text.primary }}
               >
                 Se connecter
               </Button>
@@ -179,7 +242,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 size="small"
                 component={Link}
                 to="/signup"
-                sx={{ color: theme.palette.text.primary }} // Assurez-vous que le texte est visible
+                sx={{ color: theme.palette.text.primary }}
               >
                 S'inscrire
               </Button>
@@ -190,7 +253,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 color="primary"
                 aria-label="menu"
                 onClick={toggleDrawer(true)}
-                sx={{ minWidth: '30px', p: '4px', color: theme.palette.text.primary }} // Assurez-vous que le texte est visible
+                sx={{ minWidth: '30px', p: '4px', color: theme.palette.text.primary }}
               >
                 <MenuIcon />
               </Button>
@@ -221,7 +284,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                       variant="contained"
                       component={Link}
                       to="/signup"
-                      sx={{ width: '100%', color: theme.palette.text.primary }} // Assurez-vous que le texte est visible
+                      sx={{ width: '100%', color: theme.palette.text.primary }}
                     >
                       S'inscrire
                     </Button>
@@ -232,7 +295,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                       variant="outlined"
                       component={Link}
                       to="/login"
-                      sx={{ width: '100%', color: theme.palette.text.primary }} // Assurez-vous que le texte est visible
+                      sx={{ width: '100%', color: theme.palette.text.primary }}
                     >
                       Se connecter
                     </Button>

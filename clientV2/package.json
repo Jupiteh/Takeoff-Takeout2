@@ -10,13 +10,15 @@
         "eject": "react-scripts eject"
     },
     "dependencies": {
-        "@emotion/react": "^11.7.1",
-        "@emotion/styled": "^11.7.1",
+        "@emotion/react": "^11.11.4",
+        "@emotion/styled": "^11.11.5",
         "@mui/icons-material": "^5.15.21",
-        "@mui/material": "^5.0.0",
+        "@mui/material": "^5.15.21",
+        "@react-google-maps/api": "^2.19.3",
         "@reduxjs/toolkit": "^2.2.6",
         "axios": "^0.24.0",
         "jwt-decode": "^4.0.0",
+        "places.js": "^1.19.0",
         "prop-types": "^15.8.1",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",

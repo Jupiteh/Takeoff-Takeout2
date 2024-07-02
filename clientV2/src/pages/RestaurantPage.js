@@ -1,91 +1,87 @@
-// src/pages/RestaurantsPage.js
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
-import React, { useState } from 'react';
-import { Container, Box, Typography, Grid, TextField, IconButton, Card, CardContent, CardMedia, Button } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
+export default function RestaurantListPage() {
+  const [restaurants, setRestaurants] = React.useState([]);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [category, setCategory] = React.useState('');
 
-const sampleRestaurants = [
-  {
-    name: "Le Gourmet",
-    category: "French",
-    image: "path/to/image1.jpg"
-  },
-  {
-    name: "Sushi Express",
-    category: "Japanese",
-    image: "path/to/image2.jpg"
-  },
-  {
-    name: "Pizza Palace",
-    category: "Italian",
-    image: "path/to/image3.jpg"
-  }
-];
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const latitude = params.get('latitude');
+    const longitude = params.get('longitude');
 
-const categories = [
-  "French",
-  "Japanese",
-  "Italian",
-  "Chinese",
-  "Indian"
-];
-
-export default function RestaurantsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+    fetch(`http://localhost:8080/api/restaurants/location?latitude=${latitude}&longitude=${longitude}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched restaurants data:', data); // Log de la réponse de l'API
+        // Assurez-vous que `data` est un tableau
+        if (Array.isArray(data)) {
+          setRestaurants(data);
+        } else {
+          console.error('Expected an array but got:', data);
+        }
+      })
+      .catch(error => console.error('Error fetching restaurants:', error));
+  }, []);
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
+    setCategory(category);
   };
 
-  const filteredRestaurants = sampleRestaurants.filter(
-    (restaurant) =>
-      restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (!selectedCategory || restaurant.category === selectedCategory)
-  );
+  const filteredRestaurants = Array.isArray(restaurants)
+    ? restaurants.filter(restaurant => 
+        restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (category ? restaurant.category === category : true)
+      )
+    : [];
 
   return (
     <Container>
-      <Box my={4}>
-        <Typography variant="h4" align="center" gutterBottom>
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
           Restaurants disponibles
         </Typography>
-        <Box display="flex" justifyContent="center" mb={4}>
+        <Box sx={{ display: 'flex', mb: 2 }}>
           <TextField
+            label="Recherche par nom"
             variant="outlined"
-            placeholder="Rechercher par nom"
-            value={searchQuery}
+            fullWidth
+            value={searchTerm}
             onChange={handleSearchChange}
-            InputProps={{
-              endAdornment: (
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-            sx={{ width: '50%' }}
+            sx={{ mr: 2 }}
           />
+          <Button variant="contained" color="primary" onClick={() => handleCategoryClick('')}>
+            Réinitialiser les filtres
+          </Button>
         </Box>
-        <Box display="flex" justifyContent="center" mb={4}>
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "contained" : "outlined"}
-              onClick={() => handleCategoryClick(category)}
-              sx={{ mx: 1 }}
-            >
-              {category}
-            </Button>
-          ))}
+        <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+          <Button variant="outlined" onClick={() => handleCategoryClick('Italian')}>
+            Italien
+          </Button>
+          <Button variant="outlined" onClick={() => handleCategoryClick('Chinese')}>
+            Chinois
+          </Button>
+          <Button variant="outlined" onClick={() => handleCategoryClick('Mexican')}>
+            Mexicain
+          </Button>
+          {/* Ajoutez plus de catégories ici */}
         </Box>
-        <Grid container spacing={3}>
-          {filteredRestaurants.map((restaurant, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+        <Grid container spacing={4}>
+          {filteredRestaurants.map((restaurant) => (
+            <Grid item key={restaurant.id} xs={12} sm={6} md={4}>
               <Card>
                 <CardMedia
                   component="img"
@@ -94,8 +90,12 @@ export default function RestaurantsPage() {
                   alt={restaurant.name}
                 />
                 <CardContent>
-                  <Typography variant="h6">{restaurant.name}</Typography>
-                  <Typography variant="body2" color="textSecondary">{restaurant.category}</Typography>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {restaurant.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {restaurant.description}
+                  </Typography>
                 </CardContent>
               </Card>
             </Grid>
