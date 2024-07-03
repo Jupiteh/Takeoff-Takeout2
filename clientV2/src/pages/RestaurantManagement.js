@@ -42,13 +42,13 @@ export default function RestaurantManagement() {
     ID_Restaurateur: userId,
     nom_Restaurant: '',
     category: '',
-    image: '',
+    image: null,
     adresse: ''
   });
   const [newArticle, setNewArticle] = useState({
     ID_Restaurant: '',
     article_Name: '',
-    image: '',
+    image: null,
     price: ''
   });
   const [newMenu, setNewMenu] = useState({
@@ -109,6 +109,9 @@ export default function RestaurantManagement() {
       };
 
       fetchArticlesAndMenus();
+    } else {
+      setRestaurantArticles([]);
+      setRestaurantMenus([]);
     }
   }, [selectedRestaurant]);
 
@@ -119,18 +122,25 @@ export default function RestaurantManagement() {
 
   const handleFileChange = (event, stateSetter) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      stateSetter((prevState) => ({ ...prevState, image: reader.result }));
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    stateSetter((prevState) => ({ ...prevState, image: file }));
   };
 
   const handleCreateRestaurant = async () => {
+    const formData = new FormData();
+    formData.append('ID_Restaurateur', newRestaurant.ID_Restaurateur);
+    formData.append('nom_Restaurant', newRestaurant.nom_Restaurant);
+    formData.append('category', newRestaurant.category);
+    formData.append('adresse', newRestaurant.adresse);
+    if (newRestaurant.image) {
+      formData.append('image', newRestaurant.image);
+    }
+
     try {
-      const response = await axios.post('http://localhost:3001/api/restaurants', newRestaurant);
+      const response = await axios.post('http://localhost:3001/api/restaurants', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       setRestaurateurRestaurants([...restaurateurRestaurants, response.data]);
       setOpenDialog({ ...openDialog, restaurant: false });
     } catch (error) {
@@ -139,8 +149,20 @@ export default function RestaurantManagement() {
   };
 
   const handleCreateArticle = async () => {
+    const formData = new FormData();
+    formData.append('ID_Restaurant', selectedRestaurant);
+    formData.append('article_Name', newArticle.article_Name);
+    formData.append('price', newArticle.price);
+    if (newArticle.image) {
+      formData.append('image', newArticle.image);
+    }
+
     try {
-      const response = await axios.post('http://localhost:3001/api/articles', { ...newArticle, ID_Restaurant: selectedRestaurant });
+      const response = await axios.post('http://localhost:3001/api/articles', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       setRestaurantArticles([...restaurantArticles, response.data]);
       setOpenDialog({ ...openDialog, article: false });
     } catch (error) {
@@ -159,10 +181,22 @@ export default function RestaurantManagement() {
   };
 
   const handleEditRestaurant = async () => {
+    const formData = new FormData();
+    formData.append('nom_Restaurant', editRestaurantData.nom_Restaurant);
+    formData.append('category', editRestaurantData.category);
+    formData.append('adresse', editRestaurantData.adresse);
+    if (editRestaurantData.image) {
+      formData.append('image', editRestaurantData.image);
+    }
+
     try {
-      await axios.put(`http://localhost:3001/api/restaurants/${editRestaurantData.ID_Restaurant}`, editRestaurantData);
+      await axios.put(`http://localhost:3001/api/restaurants/${editRestaurantData.ID_Restaurant}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       const updatedRestaurants = restaurateurRestaurants.map((restaurant) =>
-        restaurant.ID_Restaurant === editRestaurantData.ID_Restaurant ? editRestaurantData : restaurant
+        restaurant.ID_Restaurant === editRestaurantData.ID_Restaurant ? { ...restaurant, ...editRestaurantData } : restaurant
       );
       setRestaurateurRestaurants(updatedRestaurants);
       setOpenDialog({ ...openDialog, editRestaurant: false });
@@ -172,10 +206,21 @@ export default function RestaurantManagement() {
   };
 
   const handleEditArticle = async () => {
+    const formData = new FormData();
+    formData.append('article_Name', editArticleData.article_Name);
+    formData.append('price', editArticleData.price);
+    if (editArticleData.image) {
+      formData.append('image', editArticleData.image);
+    }
+
     try {
-      await axios.put(`http://localhost:3001/api/articles/${editArticleData.ID_Article}`, editArticleData);
+      await axios.put(`http://localhost:3001/api/articles/${editArticleData.ID_Article}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       const updatedArticles = restaurantArticles.map((article) =>
-        article.ID_Article === editArticleData.ID_Article ? editArticleData : article
+        article.ID_Article === editArticleData.ID_Article ? { ...article, ...editArticleData } : article
       );
       setRestaurantArticles(updatedArticles);
       setOpenDialog({ ...openDialog, editArticle: false });
@@ -188,7 +233,7 @@ export default function RestaurantManagement() {
     try {
       await axios.put(`http://localhost:3001/api/menus/${editMenuData.ID_Menu}`, editMenuData);
       const updatedMenus = restaurantMenus.map((menu) =>
-        menu.ID_Menu === editMenuData.ID_Menu ? editMenuData : menu
+        menu.ID_Menu === editMenuData.ID_Menu ? { ...menu, ...editMenuData } : menu
       );
       setRestaurantMenus(updatedMenus);
       setOpenDialog({ ...openDialog, editMenu: false });
@@ -222,8 +267,8 @@ export default function RestaurantManagement() {
   };
 
   return (
-    <Container component="main" maxWidth="md">
-      <Box sx={{ marginTop: 12, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container component="main" maxWidth="lg">
+      <Box sx={{ marginTop: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Avatar sx={{ width: 100, height: 100, mb: 2 }} />
         <Typography component="h1" variant="h5">
           {user?.username}
@@ -233,12 +278,21 @@ export default function RestaurantManagement() {
         </Typography>
         <Box sx={{ mt: 3, width: '100%' }}>
           <Grid container spacing={3}>
-            {role === 'restaurateur' && restaurateurRestaurants.length > 0 && (
+            {role === 'restaurateur' && (
               <Grid item xs={12}>
-                <Paper sx={{ p: 2 }}>
+                <Paper sx={{ p: 2, mb: 2 }}>
                   <Typography component="h2" variant="h6">
                     Mes Restaurants
                   </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<RestaurantMenuIcon />}
+                    onClick={() => setOpenDialog({ ...openDialog, restaurant: true })}
+                    sx={{ mt: 2, mb: 2 }}
+                  >
+                    Ajouter un Restaurant
+                  </Button>
                   <List>
                     {restaurateurRestaurants.map((restaurant, index) => (
                       <ListItem key={index} button onClick={() => setSelectedRestaurant(restaurant.ID_Restaurant)} selected={selectedRestaurant === restaurant.ID_Restaurant}>
@@ -253,7 +307,7 @@ export default function RestaurantManagement() {
               </Grid>
             )}
             <Grid item xs={12}>
-              <Paper sx={{ p: 2 }}>
+              <Paper sx={{ p: 2, mb: 2 }}>
                 <Typography component="h2" variant="h6">
                   Articles
                 </Typography>
@@ -262,7 +316,7 @@ export default function RestaurantManagement() {
                   color="primary"
                   startIcon={<AddIcon />}
                   onClick={() => setOpenDialog({ ...openDialog, article: true })}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, mb: 2 }}
                   disabled={!selectedRestaurant}
                 >
                   Ajouter un Article
@@ -292,7 +346,7 @@ export default function RestaurantManagement() {
                   color="primary"
                   startIcon={<MenuBookIcon />}
                   onClick={() => setOpenDialog({ ...openDialog, menu: true })}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, mb: 2 }}
                   disabled={!selectedRestaurant}
                 >
                   Créer un Menu
@@ -301,6 +355,7 @@ export default function RestaurantManagement() {
                   variant="contained"
                   color="primary"
                   onClick={() => setOpenDialog({ ...openDialog, addArticleToMenu: true })}
+                  sx={{ mt: 2, mb: 2 }}
                   disabled={!selectedMenu}
                 >
                   Ajouter l'article au menu
