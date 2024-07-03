@@ -35,6 +35,7 @@ export default function RestaurantManagement() {
   const [restaurateurRestaurants, setRestaurateurRestaurants] = useState([]);
   const [restaurantArticles, setRestaurantArticles] = useState([]);
   const [restaurantMenus, setRestaurantMenus] = useState([]);
+  const [menuArticles, setMenuArticles] = useState({});
   const [selectedRestaurant, setSelectedRestaurant] = useState('');
   const [selectedMenu, setSelectedMenu] = useState('');
   const [selectedArticleId, setSelectedArticleId] = useState('');
@@ -42,13 +43,13 @@ export default function RestaurantManagement() {
     ID_Restaurateur: userId,
     nom_Restaurant: '',
     category: '',
-    image: null,
+    image: '',
     adresse: ''
   });
   const [newArticle, setNewArticle] = useState({
     ID_Restaurant: '',
     article_Name: '',
-    image: null,
+    image: '',
     price: ''
   });
   const [newMenu, setNewMenu] = useState({
@@ -115,6 +116,21 @@ export default function RestaurantManagement() {
     }
   }, [selectedRestaurant]);
 
+  useEffect(() => {
+    const fetchMenuArticles = async (menuId) => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/menuArticles/${menuId}`);
+        setMenuArticles((prev) => ({ ...prev, [menuId]: response.data }));
+      } catch (error) {
+        console.error('Error fetching menu articles:', error);
+      }
+    };
+
+    if (selectedMenu) {
+      fetchMenuArticles(selectedMenu);
+    }
+  }, [selectedMenu]);
+
   const handleInputChange = (event, stateSetter) => {
     const { name, value } = event.target;
     stateSetter((prevState) => ({ ...prevState, [name]: value }));
@@ -122,25 +138,25 @@ export default function RestaurantManagement() {
 
   const handleFileChange = (event, stateSetter) => {
     const file = event.target.files[0];
-    stateSetter((prevState) => ({ ...prevState, image: file }));
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      stateSetter((prevState) => ({ ...prevState, image: reader.result }));
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleCreateRestaurant = async () => {
-    const formData = new FormData();
-    formData.append('ID_Restaurateur', newRestaurant.ID_Restaurateur);
-    formData.append('nom_Restaurant', newRestaurant.nom_Restaurant);
-    formData.append('category', newRestaurant.category);
-    formData.append('adresse', newRestaurant.adresse);
-    if (newRestaurant.image) {
-      formData.append('image', newRestaurant.image);
-    }
-
     try {
-      const response = await axios.post('http://localhost:3001/api/restaurants', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const formData = new FormData();
+      formData.append('ID_Restaurateur', newRestaurant.ID_Restaurateur);
+      formData.append('nom_Restaurant', newRestaurant.nom_Restaurant);
+      formData.append('category', newRestaurant.category);
+      formData.append('adresse', newRestaurant.adresse);
+      formData.append('image', newRestaurant.image);
+
+      const response = await axios.post('http://localhost:3001/api/restaurants', formData);
       setRestaurateurRestaurants([...restaurateurRestaurants, response.data]);
       setOpenDialog({ ...openDialog, restaurant: false });
     } catch (error) {
@@ -149,20 +165,14 @@ export default function RestaurantManagement() {
   };
 
   const handleCreateArticle = async () => {
-    const formData = new FormData();
-    formData.append('ID_Restaurant', selectedRestaurant);
-    formData.append('article_Name', newArticle.article_Name);
-    formData.append('price', newArticle.price);
-    if (newArticle.image) {
-      formData.append('image', newArticle.image);
-    }
-
     try {
-      const response = await axios.post('http://localhost:3001/api/articles', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const formData = new FormData();
+      formData.append('ID_Restaurant', selectedRestaurant);
+      formData.append('article_Name', newArticle.article_Name);
+      formData.append('price', newArticle.price);
+      formData.append('image', newArticle.image);
+
+      const response = await axios.post('http://localhost:3001/api/articles', formData);
       setRestaurantArticles([...restaurantArticles, response.data]);
       setOpenDialog({ ...openDialog, article: false });
     } catch (error) {
@@ -172,7 +182,13 @@ export default function RestaurantManagement() {
 
   const handleCreateMenu = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/menus', { ...newMenu, ID_Restaurant: selectedRestaurant });
+      const menuData = {
+        ID_Restaurant: selectedRestaurant,
+        menu_Name: newMenu.menu_Name,
+        price: newMenu.price
+      };
+
+      const response = await axios.post('http://localhost:3001/api/menus', menuData);
       setRestaurantMenus([...restaurantMenus, response.data]);
       setOpenDialog({ ...openDialog, menu: false });
     } catch (error) {
@@ -181,22 +197,16 @@ export default function RestaurantManagement() {
   };
 
   const handleEditRestaurant = async () => {
-    const formData = new FormData();
-    formData.append('nom_Restaurant', editRestaurantData.nom_Restaurant);
-    formData.append('category', editRestaurantData.category);
-    formData.append('adresse', editRestaurantData.adresse);
-    if (editRestaurantData.image) {
-      formData.append('image', editRestaurantData.image);
-    }
-
     try {
-      await axios.put(`http://localhost:3001/api/restaurants/${editRestaurantData.ID_Restaurant}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const formData = new FormData();
+      formData.append('nom_Restaurant', editRestaurantData.nom_Restaurant);
+      formData.append('category', editRestaurantData.category);
+      formData.append('adresse', editRestaurantData.adresse);
+      formData.append('image', editRestaurantData.image);
+
+      await axios.put(`http://localhost:3001/api/restaurants/${editRestaurantData.ID_Restaurant}`, formData);
       const updatedRestaurants = restaurateurRestaurants.map((restaurant) =>
-        restaurant.ID_Restaurant === editRestaurantData.ID_Restaurant ? { ...restaurant, ...editRestaurantData } : restaurant
+        restaurant.ID_Restaurant === editRestaurantData.ID_Restaurant ? editRestaurantData : restaurant
       );
       setRestaurateurRestaurants(updatedRestaurants);
       setOpenDialog({ ...openDialog, editRestaurant: false });
@@ -206,21 +216,15 @@ export default function RestaurantManagement() {
   };
 
   const handleEditArticle = async () => {
-    const formData = new FormData();
-    formData.append('article_Name', editArticleData.article_Name);
-    formData.append('price', editArticleData.price);
-    if (editArticleData.image) {
-      formData.append('image', editArticleData.image);
-    }
-
     try {
-      await axios.put(`http://localhost:3001/api/articles/${editArticleData.ID_Article}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const formData = new FormData();
+      formData.append('article_Name', editArticleData.article_Name);
+      formData.append('price', editArticleData.price);
+      formData.append('image', editArticleData.image);
+
+      await axios.put(`http://localhost:3001/api/articles/${editArticleData.ID_Article}`, formData);
       const updatedArticles = restaurantArticles.map((article) =>
-        article.ID_Article === editArticleData.ID_Article ? { ...article, ...editArticleData } : article
+        article.ID_Article === editArticleData.ID_Article ? editArticleData : article
       );
       setRestaurantArticles(updatedArticles);
       setOpenDialog({ ...openDialog, editArticle: false });
@@ -231,9 +235,14 @@ export default function RestaurantManagement() {
 
   const handleEditMenu = async () => {
     try {
-      await axios.put(`http://localhost:3001/api/menus/${editMenuData.ID_Menu}`, editMenuData);
+      const menuData = {
+        menu_Name: editMenuData.menu_Name,
+        price: editMenuData.price
+      };
+
+      await axios.put(`http://localhost:3001/api/menus/${editMenuData.ID_Menu}`, menuData);
       const updatedMenus = restaurantMenus.map((menu) =>
-        menu.ID_Menu === editMenuData.ID_Menu ? { ...menu, ...editMenuData } : menu
+        menu.ID_Menu === editMenuData.ID_Menu ? editMenuData : menu
       );
       setRestaurantMenus(updatedMenus);
       setOpenDialog({ ...openDialog, editMenu: false });
@@ -363,7 +372,21 @@ export default function RestaurantManagement() {
                 <List>
                   {restaurantMenus.map((menu, index) => (
                     <ListItem key={index} button onClick={() => setSelectedMenu(menu.ID_Menu)} selected={selectedMenu === menu.ID_Menu}>
-                      <ListItemText primary={menu.menu_Name} secondary={`Prix: ${menu.price}€`} />
+                      <ListItemText 
+                        primary={menu.menu_Name} 
+                        secondary={
+                          <>
+                            {`Prix: ${menu.price}€`}
+                            {menuArticles[menu.ID_Menu] && (
+                              <ul>
+                                {menuArticles[menu.ID_Menu].map((article) => (
+                                  <li key={article.ID_Article}>{article.article_Name}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </>
+                        }
+                      />
                       <IconButton edge="end" aria-label="edit" onClick={() => openEditMenuDialog(menu)}>
                         <EditIcon />
                       </IconButton>
